@@ -16,18 +16,17 @@ const bgClasses = {
 
 const penaltyDescriptions = {
   noPenalty: "No Penalty",
-  substitute: "Substitute",
-  pickedUp: "Picked Up",
-  illegalPositionInSet: "Illegal Position",
-  illegalPosition: "Illegal Position",
+  illegalPositioning: "Illegal Positioning",
   motionInSet: "Motion in Set",
-  fallenInactive: "Fallen / Inactive",
   localGameStuck: "Local Game Stuck",
+  incapableRobot: "Incapable Robot",
+  pickedUp: "Picked Up",
   ballHolding: "Ball Holding",
-  playerStance: "Player Stance",
-  playerPushing: "Pushing",
-  playingWithArmsHands: "Arms / Hands",
   leavingTheField: "Leaving the Field",
+  playingWithArmsHands: "Arms / Hands",
+  pushing: "Pushing",
+  sentOff: "Sent Off",
+  substitute: "Substitute",
 };
 
 const ConnectionStatusIndicatorIcon = ({ connectionStatus }) => {
@@ -46,6 +45,7 @@ const PlayerButton = ({ color, legal, sign, onClick, player }) => {
   const shouldFlash =
     player &&
     player.penalty != "noPenalty" &&
+    player.penalty != "sentOff" &&
     player.penalty != "substitute" &&
     player.penalty != "motionInSet" &&
     (player.penaltyTimer.started

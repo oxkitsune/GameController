@@ -23,7 +23,9 @@ impl Action for StartPenaltyShootout {
             team.penalty_shot = 0;
             team.penalty_shot_mask = 0;
             team.players.iter_mut().for_each(|player| {
-                player.penalty = Penalty::Substitute;
+                if player.penalty != Penalty::SentOff {
+                    player.penalty = Penalty::Substitute;
+                }
                 player.penalty_timer = Timer::Stopped;
             });
         });

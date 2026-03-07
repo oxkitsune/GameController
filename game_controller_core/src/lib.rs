@@ -77,6 +77,8 @@ impl GameController {
                             Penalty::Substitute
                         },
                         penalty_timer: Timer::Stopped,
+                        warnings: 0,
+                        cautions: 0,
                     })
                     // We have to collect into a Vec first because this thing cannot be directly
                     // collected into a fixed size array.

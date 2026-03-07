@@ -6,7 +6,7 @@ export const PENALTIES = [
   ["Illegal Position", "illegalPosition"],
   ["Ball Holding", "ballHolding"],
   ["Local Game Stuck", "localGameStuck"],
-  ["Pick-Up", "requestForPickUp"],
+  ["Pick-up", "requestForPickUp"],
   ["Arms / Hands", "playingWithArmsHands"],
 ];
 

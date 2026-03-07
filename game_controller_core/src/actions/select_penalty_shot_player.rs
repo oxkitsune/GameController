@@ -31,6 +31,8 @@ impl Action for SelectPenaltyShotPlayer {
                     Player {
                         penalty: Penalty::Substitute,
                         penalty_timer: Timer::Stopped,
+                        warnings: player.warnings,
+                        cautions: player.cautions,
                     },
                 )
             })
@@ -38,6 +40,8 @@ impl Action for SelectPenaltyShotPlayer {
             .unwrap_or(Player {
                 penalty: Penalty::NoPenalty,
                 penalty_timer: Timer::Stopped,
+                warnings: 0, // TODO
+                cautions: 0, // TODO
             });
 
         c.game.teams[self.side].goalkeeper = if self.goalkeeper {
@@ -49,5 +53,6 @@ impl Action for SelectPenaltyShotPlayer {
 
     fn is_legal(&self, c: &ActionContext) -> bool {
         c.game.phase == Phase::PenaltyShootout
+            && c.game.teams[self.side][self.player].penalty != Penalty::SentOff
     }
 }

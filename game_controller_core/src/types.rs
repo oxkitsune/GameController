@@ -247,6 +247,8 @@ pub enum Penalty {
     PlayingWithArmsHands,
     /// The player has committed a pushing offence.
     Pushing,
+    /// The player has been sent off. (Doesn't matter for what.)
+    SentOff,
     /// The player is currently a substitute.
     Substitute,
 }
@@ -269,6 +271,9 @@ pub enum PenaltyCall {
     LeavingTheField,
     PlayingWithArmsHands,
     Pushing,
+    Warn,
+    Caution,
+    SendOff,
 }
 
 /// This enumerates the two opposing teams of the game. The name `Side` may be slightly misleading
@@ -448,6 +453,10 @@ pub struct Player {
     pub penalty: Penalty,
     /// The timer which counts down until the penalty is over.
     pub penalty_timer: Timer,
+    /// The number of warnings of the player.
+    pub warnings: u8,
+    /// The number of cautions (yellow cards) of the player.
+    pub cautions: u8,
 }
 
 /// This enumerates the possible sources that can trigger actions.

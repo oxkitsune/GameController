@@ -24,6 +24,7 @@ impl Action for Unpenalize {
 
     fn is_legal(&self, c: &ActionContext) -> bool {
         c.game.teams[self.side][self.player].penalty != Penalty::NoPenalty
+            && c.game.teams[self.side][self.player].penalty != Penalty::SentOff
             && c.game.teams[self.side][self.player].penalty != Penalty::Substitute
             && (c.game.teams[self.side][self.player]
                 .penalty_timer

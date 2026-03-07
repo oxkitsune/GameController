@@ -12,11 +12,11 @@ use crate::bindings::{
     KICKING_TEAM_NONE, MAX_NUM_PLAYERS, PENALTY_BALL_HOLDING, PENALTY_ILLEGAL_POSITIONING,
     PENALTY_INCAPABLE_ROBOT, PENALTY_LEAVING_THE_FIELD, PENALTY_LOCAL_GAME_STUCK,
     PENALTY_MOTION_IN_SET, PENALTY_NONE, PENALTY_PICK_UP, PENALTY_PLAYING_WITH_ARMS_HANDS,
-    PENALTY_PUSHING, PENALTY_SUBSTITUTE, SET_PLAY_CORNER_KICK, SET_PLAY_DIRECT_FREE_KICK,
-    SET_PLAY_GOAL_KICK, SET_PLAY_INDIRECT_FREE_KICK, SET_PLAY_NONE, SET_PLAY_PENALTY_KICK,
-    SET_PLAY_THROW_IN, STATE_FINISHED, STATE_INITIAL, STATE_PLAYING, STATE_READY, STATE_SET,
-    TEAM_BLACK, TEAM_BLUE, TEAM_BROWN, TEAM_GRAY, TEAM_GREEN, TEAM_ORANGE, TEAM_PURPLE, TEAM_RED,
-    TEAM_WHITE, TEAM_YELLOW,
+    PENALTY_PUSHING, PENALTY_SENT_OFF, PENALTY_SUBSTITUTE, SET_PLAY_CORNER_KICK,
+    SET_PLAY_DIRECT_FREE_KICK, SET_PLAY_GOAL_KICK, SET_PLAY_INDIRECT_FREE_KICK, SET_PLAY_NONE,
+    SET_PLAY_PENALTY_KICK, SET_PLAY_THROW_IN, STATE_FINISHED, STATE_INITIAL, STATE_PLAYING,
+    STATE_READY, STATE_SET, TEAM_BLACK, TEAM_BLUE, TEAM_BROWN, TEAM_GRAY, TEAM_GREEN, TEAM_ORANGE,
+    TEAM_PURPLE, TEAM_RED, TEAM_WHITE, TEAM_YELLOW,
 };
 
 /// This struct corresponds to the `RobotInfo`.
@@ -238,6 +238,7 @@ impl ControlMessage {
                             Penalty::LeavingTheField => PENALTY_LEAVING_THE_FIELD,
                             Penalty::PlayingWithArmsHands => PENALTY_PLAYING_WITH_ARMS_HANDS,
                             Penalty::Pushing => PENALTY_PUSHING,
+                            Penalty::SentOff => PENALTY_SENT_OFF,
                             Penalty::Substitute => PENALTY_SUBSTITUTE,
                         },
                         secs_till_unpenalized: get_duration(
@@ -245,8 +246,8 @@ impl ControlMessage {
                             u8::MIN as i64,
                             u8::MAX as i64,
                         ) as u8,
-                        warnings: 0u8,
-                        cautions: 0u8,
+                        warnings: player.warnings,
+                        cautions: player.cautions,
                     }),
             }),
         }

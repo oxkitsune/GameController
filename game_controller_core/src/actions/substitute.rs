@@ -1,4 +1,4 @@
-use std::mem::replace;
+use std::mem::{replace, swap};
 
 use serde::{Deserialize, Serialize};
 
@@ -45,6 +45,11 @@ impl Action for Substitute {
                 Timer::Stopped,
             );
         }
+        // TODO
+        /*
+        swap(&mut c.game.teams[self.side][self.player_in].warnings, &mut c.game.teams[self.side][self.player_out].warnings);
+        swap(&mut c.game.teams[self.side][self.player_in].cautions, &mut c.game.teams[self.side][self.player_out].cautions);
+        */
         c.game.teams[self.side][self.player_out].penalty = Penalty::Substitute;
         if c.game.teams[self.side].goalkeeper == Some(self.player_out) {
             c.game.teams[self.side].goalkeeper = Some(self.player_in);
@@ -52,9 +57,11 @@ impl Action for Substitute {
     }
 
     fn is_legal(&self, c: &ActionContext) -> bool {
+        // TODO: only during stoppages in play
         c.game.phase != Phase::PenaltyShootout
             && self.player_in != self.player_out
             && c.game.teams[self.side][self.player_in].penalty == Penalty::Substitute
             && c.game.teams[self.side][self.player_out].penalty != Penalty::Substitute
+            && c.game.teams[self.side][self.player_out].penalty != Penalty::SentOff
     }
 }

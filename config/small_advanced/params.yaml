@@ -52,6 +52,11 @@ penalties:
       secs: 30
       nanos: 0
     incremental: true
+  sentOff:
+    duration:
+      secs: 0
+      nanos: 0
+    incremental: false
   substitute:
     duration:
       secs: 0
