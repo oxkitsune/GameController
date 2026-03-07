@@ -123,6 +123,9 @@ halfDuration:
 halfTimeBreakDuration:
   secs: 600
   nanos: 0
+extraHalfDuration:
+  secs: 300
+  nanos: 0
 timeoutDuration:
   secs: 300
   nanos: 0

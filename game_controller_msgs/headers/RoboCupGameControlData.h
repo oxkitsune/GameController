@@ -25,12 +25,11 @@
 #define COMPETITION_TYPE_SMALL  0
 #define COMPETITION_TYPE_MIDDLE 1
 #define COMPETITION_TYPE_LARGE  2
-// TODO: should there be constants for Advanced vs. Foundation? or is this redundant with playersPerTeam
 
-#define GAME_PHASE_NORMAL       0
-#define GAME_PHASE_PENALTYSHOOT 1
-#define GAME_PHASE_EXTRATIME    2
-#define GAME_PHASE_TIMEOUT      3
+#define GAME_PHASE_NORMAL            0
+#define GAME_PHASE_PENALTY_SHOOT_OUT 1
+#define GAME_PHASE_EXTRA_TIME        2
+#define GAME_PHASE_TIMEOUT           3
 
 #define STATE_INITIAL  0
 #define STATE_READY    1
@@ -64,7 +63,7 @@
 
 struct RobotInfo
 {
-  uint8_t penalty;             // penalty state of the player
+  uint8_t penalty;             // penalty state of the player (PENALTY_NONE, etc)
   uint8_t secsTillUnpenalised; // estimate of time till unpenalised
   uint8_t warnings;            // number of warnings
   uint8_t cautions;            // number of cautions (yellow cards)
@@ -73,8 +72,8 @@ struct RobotInfo
 struct TeamInfo
 {
   uint8_t teamNumber;                        // unique team number
-  uint8_t fieldPlayerColour;                 // colour of the field players
-  uint8_t goalkeeperColour;                  // colour of the goalkeeper
+  uint8_t fieldPlayerColour;                 // colour of the field players (TEAM_BLUE, etc)
+  uint8_t goalkeeperColour;                  // colour of the goalkeeper (TEAM_BLUE, etc)
   uint8_t goalkeeper;                        // player number of the goalkeeper (0-MAX_NUM_PLAYERS)
   uint8_t score;                             // team's score
   uint8_t penaltyShot;                       // penalty shot counter
@@ -90,10 +89,10 @@ struct RoboCupGameControlData
   uint8_t packetNumber;     // number incremented with each packet sent (with wraparound)
   uint8_t playersPerTeam;   // the number of players on a team
   uint8_t competitionType;  // type of the competition (COMPETITION_TYPE_SMALL, etc)
-  uint8_t stopped;          // TODO is this really orthogonal to the state?
-  uint8_t gamePhase;        // phase of the game (GAME_PHASE_NORMAL, GAME_PHASE_PENALTYSHOOT, etc)
-  uint8_t state;            // state of the game (STATE_READY, STATE_PLAYING, etc)
-  uint8_t setPlay;          // active set play (SET_PLAY_NONE, SET_PLAY_GOAL_KICK, etc)
+  uint8_t stopped;          // 1 = play is currently stopped, 0 otherwise
+  uint8_t gamePhase;        // phase of the game (GAME_PHASE_NORMAL, etc)
+  uint8_t state;            // state of the game (STATE_INITIAL, etc)
+  uint8_t setPlay;          // active set play (SET_PLAY_NONE, etc)
   uint8_t firstHalf;        // 1 = game in first half, 0 otherwise
   uint8_t kickingTeam;      // the team number of the next team to kick-off, free kick etc, or KICKING_TEAM_NONE
   int16_t secsRemaining;    // estimate of number of seconds remaining in the half

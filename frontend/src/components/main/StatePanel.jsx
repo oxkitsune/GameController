@@ -3,8 +3,10 @@ import * as actions from "../../actions.js";
 
 const StatePanel = ({ game, params, legalGameActions }) => {
   const inHalfTimeBreak =
-    (game.phase === "firstHalf" && game.state === "finished") ||
-    (game.phase === "secondHalf" && game.state === "initial");
+    ((game.phase === "firstHalf" || game.phase === "firstExtraHalf") &&
+      game.state === "finished") ||
+    ((game.phase === "secondHalf" || game.phase === "secondExtraHalf") && game.state === "initial");
+  const hasExtraTime = params.competition.extraHalfDuration.secs > 0;
 
   let readySideMap = {
     null: actions.START_KICK_OFF_NONE,
@@ -15,7 +17,8 @@ const StatePanel = ({ game, params, legalGameActions }) => {
     game.phase != "penaltyShootout" &&
     (game.state === "initial" ||
       game.state === "timeout" ||
-      (game.phase === "firstHalf" && game.state === "finished")) ? (
+      ((game.phase === "firstHalf" || game.phase === "firstExtraHalf") &&
+        game.state === "finished")) ? (
       <div className={inHalfTimeBreak ? "col-span-3" : "col-span-4"}>
         <ActionButton
           action={{ type: "startSetPlay", args: { side: game.kickingSide, setPlay: "kickOff" } }}
@@ -133,7 +136,8 @@ const StatePanel = ({ game, params, legalGameActions }) => {
   );
 
   let penaltyShootoutButtons =
-    game.phase === "secondHalf" && game.state === "finished" ? (
+    game.phase === (hasExtraTime ? "secondExtraHalf" : "secondHalf") &&
+    game.state === "finished" ? (
       <>
         <div className="col-span-2">
           <ActionButton
@@ -154,6 +158,19 @@ const StatePanel = ({ game, params, legalGameActions }) => {
       <></>
     );
 
+  let extraTimeButton =
+    game.phase === "secondHalf" && game.state === "finished" && hasExtraTime ? (
+      <div className="col-span-4">
+        <ActionButton
+          action={{ type: "switchHalf", args: null }}
+          label="Extra Time"
+          legal={legalGameActions[actions.SWITCH_HALF]}
+        />
+      </div>
+    ) : (
+      <></>
+    );
+
   let refereeTimeoutButton = (
     <ActionButton
       action={{ type: "timeout", args: { side: null } }}
@@ -166,6 +183,7 @@ const StatePanel = ({ game, params, legalGameActions }) => {
     <div className="grid grid-cols-5 gap-2">
       {secondHalfButton}
       {penaltyShootoutButtons}
+      {extraTimeButton}
       {readyButton}
       {globalGameStuckButton}
       {setButton}

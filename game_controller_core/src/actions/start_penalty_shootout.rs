@@ -40,7 +40,13 @@ impl Action for StartPenaltyShootout {
     }
 
     fn is_legal(&self, c: &ActionContext) -> bool {
-        c.game.phase == Phase::SecondHalf
+        // If there is extra time, allow penalty shoot-out after second half of extra time.
+        c.game.phase
+            == (if c.params.competition.extra_half_duration.is_zero() {
+                Phase::SecondHalf
+            } else {
+                Phase::SecondExtraHalf
+            })
             && c.game.state == State::Finished
             && (c.game.teams[Side::Home].score == c.game.teams[Side::Away].score
                 || c.params.game.test.penalty_shootout)

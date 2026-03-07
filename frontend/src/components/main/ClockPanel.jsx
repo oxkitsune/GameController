@@ -9,9 +9,9 @@ const getPhaseDescription = (game) => {
     case "secondHalf":
       return game.state === "initial" ? "Half-Time Break" : "Second Half";
     case "firstExtraHalf":
-      return game.state === "finished" ? "Half-Time Break" : "First Extra Half";
+      return game.state === "finished" ? "Extra Time" : "First Extra Half";
     case "secondExtraHalf":
-      return game.state === "initial" ? "Half-Time Break" : "Second Extra Half";
+      return game.state === "initial" ? "Extra Time" : "Second Extra Half";
     case "penaltyShootout":
       return "Penalty Shoot-out";
   }

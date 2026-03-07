@@ -8,7 +8,7 @@ use game_controller_core::{
 use crate::bindings::{
     COMPETITION_TYPE_LARGE, COMPETITION_TYPE_MIDDLE, COMPETITION_TYPE_SMALL,
     GAMECONTROLLER_STRUCT_HEADER, GAMECONTROLLER_STRUCT_SIZE, GAMECONTROLLER_STRUCT_VERSION,
-    GAME_PHASE_EXTRATIME, GAME_PHASE_NORMAL, GAME_PHASE_PENALTYSHOOT, GAME_PHASE_TIMEOUT,
+    GAME_PHASE_EXTRA_TIME, GAME_PHASE_NORMAL, GAME_PHASE_PENALTY_SHOOT_OUT, GAME_PHASE_TIMEOUT,
     KICKING_TEAM_NONE, MAX_NUM_PLAYERS, PENALTY_BALL_HOLDING, PENALTY_ILLEGAL_POSITIONING,
     PENALTY_INCAPABLE_ROBOT, PENALTY_LEAVING_THE_FIELD, PENALTY_LOCAL_GAME_STUCK,
     PENALTY_MOTION_IN_SET, PENALTY_NONE, PENALTY_PICK_UP, PENALTY_PLAYING_WITH_ARMS_HANDS,
@@ -177,8 +177,8 @@ impl ControlMessage {
             game_phase: match (game.phase, game.state) {
                 (_, State::Timeout) => GAME_PHASE_TIMEOUT,
                 (Phase::FirstHalf | Phase::SecondHalf, _) => GAME_PHASE_NORMAL,
-                (Phase::FirstExtraHalf | Phase::SecondExtraHalf, _) => GAME_PHASE_EXTRATIME,
-                (Phase::PenaltyShootout, _) => GAME_PHASE_PENALTYSHOOT,
+                (Phase::FirstExtraHalf | Phase::SecondExtraHalf, _) => GAME_PHASE_EXTRA_TIME,
+                (Phase::PenaltyShootout, _) => GAME_PHASE_PENALTY_SHOOT_OUT,
             },
             state: match game.state {
                 State::Initial | State::Timeout => STATE_INITIAL,

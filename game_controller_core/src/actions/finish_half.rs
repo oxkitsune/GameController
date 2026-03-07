@@ -25,7 +25,9 @@ impl Action for FinishHalf {
         c.game.kicking_side = None;
         c.game.state = State::Finished;
 
-        // After the first half, a timer counts down the half-time break.
+        // After the first half, a timer counts down the half-time break. It is intentional that
+        // there is no timer after the second half or after an extra half, because the rule book
+        // does not specify any specific duration.
         if c.game.phase == Phase::FirstHalf {
             c.game.secondary_timer = Timer::Started {
                 remaining: c
