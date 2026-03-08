@@ -8,6 +8,9 @@ export const PENALTIES = [
   ["Local Game Stuck", "localGameStuck"],
   ["Pick-up", "requestForPickUp"],
   ["Arms / Hands", "playingWithArmsHands"],
+  ["Warning", "warn"],
+  ["Yellow Card", "caution"],
+  ["Red Card", "sendOff"],
 ];
 
 const NUM_OF_PLAYERS = 20;
