@@ -47,7 +47,7 @@ impl EvaluatedRunConditions {
                             Some(params.competition.half_duration)
                         }
                         Phase::FirstExtraHalf | Phase::SecondExtraHalf => {
-                            Some(params.competition.extra_half_duration)
+                            Some(params.competition.extra_half_duration.unwrap())
                         }
                         _ => None,
                     })

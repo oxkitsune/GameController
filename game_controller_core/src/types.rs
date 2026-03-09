@@ -62,8 +62,8 @@ pub struct CompetitionParams {
     pub half_duration: Duration,
     /// The duration of the half-time break.
     pub half_time_break_duration: Duration,
-    /// The duration of each half of extra time. Can be zero to disable extra time.
-    pub extra_half_duration: Duration,
+    /// The duration of each half of extra time.
+    pub extra_half_duration: Option<Duration>,
     /// The duration of a timeout taken by a team.
     pub timeout_duration: Duration,
     /// The number of timeouts a team can take during a game.
@@ -83,7 +83,7 @@ pub struct CompetitionParams {
     /// The duration of a penalty kick in a penalty shoot-out.
     pub penalty_shot_duration: Duration,
     /// The duration for which the true game state is hidden after switching to the Playing state.
-    pub delay_after_playing: Duration,
+    pub delay_after_playing: Option<Duration>,
 }
 
 /// This struct contains constant parameters for one team.

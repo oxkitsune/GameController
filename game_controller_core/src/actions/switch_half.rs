@@ -36,7 +36,7 @@ impl Action for SwitchHalf {
             remaining: (if c.game.phase == Phase::SecondHalf {
                 c.params.competition.half_duration
             } else {
-                c.params.competition.extra_half_duration
+                c.params.competition.extra_half_duration.unwrap()
             })
             .try_into()
             .unwrap(),

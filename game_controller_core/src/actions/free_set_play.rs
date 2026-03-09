@@ -15,9 +15,12 @@ impl Action for FreeSetPlay {
         // FinishSetPlay is not a reason to cancel the delayed state because that would mean that
         // e.g. a kick-off is delayed for only 10 seconds instead of the desired 15 seconds.
         if !c.params.game.test.no_delay
-            && !c.fork(c.params.competition.delay_after_playing, |action| {
-                matches!(action, VAction::FinishSetPlay(_))
-            })
+            && c.params
+                .competition
+                .delay_after_playing
+                .is_some_and(|delay| {
+                    !c.fork(delay, |action| matches!(action, VAction::FinishSetPlay(_)))
+                })
         {
             return;
         }

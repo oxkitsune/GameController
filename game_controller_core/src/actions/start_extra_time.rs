@@ -33,7 +33,13 @@ impl Action for StartExtraTime {
         c.game.kicking_side = Some(c.params.game.kick_off_side);
 
         c.game.primary_timer = Timer::Started {
-            remaining: c.params.competition.extra_half_duration.try_into().unwrap(),
+            remaining: c
+                .params
+                .competition
+                .extra_half_duration
+                .unwrap()
+                .try_into()
+                .unwrap(),
             run_condition: RunCondition::MainTimer,
             behavior_at_zero: BehaviorAtZero::Overflow,
         };
@@ -43,6 +49,6 @@ impl Action for StartExtraTime {
     fn is_legal(&self, c: &ActionContext) -> bool {
         c.game.phase == Phase::SecondHalf
             && c.game.state == State::Finished
-            && !c.params.competition.extra_half_duration.is_zero()
+            && c.params.competition.extra_half_duration.is_some()
     }
 }
