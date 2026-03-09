@@ -184,7 +184,7 @@ const TeamPanel = ({
   };
 
   return (
-    <div className="min-w-80 flex flex-col gap-2">
+    <div className="min-w-[290px] flex flex-col gap-2">
       <TeamHeader
         color={teamParams.fieldPlayerColor}
         isKicking={game.kickingSide === side}
