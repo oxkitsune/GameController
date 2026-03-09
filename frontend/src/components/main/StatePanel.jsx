@@ -8,6 +8,17 @@ const StatePanel = ({ game, params, legalGameActions }) => {
     ((game.phase === "secondHalf" || game.phase === "secondExtraHalf") && game.state === "initial");
   const hasExtraTime = params.competition.extraHalfDuration.secs > 0;
 
+  let stopResumeButton = (
+    <div className="col-span-5">
+      <ActionButton
+        action={{ type: "stopPlay", args: { resume: game.stopped } }}
+        active={game.stopped}
+        label={game.stopped ? "Resume Play" : "Stop Play"}
+        legal={legalGameActions[game.stopped ? actions.RESUME_PLAY : actions.STOP_PLAY]}
+      />
+    </div>
+  );
+
   let readySideMap = {
     null: actions.START_KICK_OFF_NONE,
     home: actions.START_KICK_OFF_HOME,
@@ -180,7 +191,8 @@ const StatePanel = ({ game, params, legalGameActions }) => {
   );
 
   return (
-    <div className="grid grid-cols-5 gap-2">
+    <div className="grid grid-cols-5 auto-rows-fr gap-2">
+      {stopResumeButton}
       {secondHalfButton}
       {penaltyShootoutButtons}
       {extraTimeButton}

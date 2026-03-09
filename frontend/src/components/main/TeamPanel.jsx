@@ -69,28 +69,14 @@ const TeamStats = ({ game, params, side, sign, team }) => {
   );
 };
 
-const FreeKickButtons = ({ game, legalTeamActions, side, sign }) => {
+const FreeKickButton = ({ game, legalTeamActions, side, setPlay, label, action }) => {
   return (
-    <div className={`flex ${sign > 0 ? "flex-row" : "flex-row-reverse"} gap-2`}>
-      <ActionButton
-        action={{ type: "startSetPlay", args: { side: side, setPlay: "goalKick" } }}
-        active={game.setPlay === "goalKick" && game.kickingSide === side}
-        label="Goal Kick"
-        legal={legalTeamActions[actions.GOAL_KICK]}
-      />
-      <ActionButton
-        action={{ type: "startSetPlay", args: { side: side, setPlay: "throwIn" } }}
-        active={game.setPlay === "throwIn" && game.kickingSide === side}
-        label="Throw-in"
-        legal={legalTeamActions[actions.THROW_IN]}
-      />
-      <ActionButton
-        action={{ type: "startSetPlay", args: { side: side, setPlay: "cornerKick" } }}
-        active={game.setPlay === "cornerKick" && game.kickingSide === side}
-        label="Corner Kick"
-        legal={legalTeamActions[actions.CORNER_KICK]}
-      />
-    </div>
+    <ActionButton
+      action={{ type: "startSetPlay", args: { side: side, setPlay: setPlay } }}
+      active={game.setPlay === setPlay && game.kickingSide === side}
+      label={label}
+      legal={legalTeamActions[action]}
+    />
   );
 };
 
@@ -204,8 +190,8 @@ const TeamPanel = ({
         isKicking={game.kickingSide === side}
         name={teamNames[side]}
       />
-      <div className={`flex ${sign > 0 ? "flex-row" : "flex-row-reverse"} gap-2`}>
-        <div className="flex-1 flex flex-col gap-2">
+      <div className="grid grid-flow-col grid-rows-4 auto-cols-fr gap-2">
+        <div className={`col-start-${2 - sign}`}>
           <ActionButton
             action={() => {
               setSubstitute(!substitute);
@@ -215,20 +201,84 @@ const TeamPanel = ({
             label={game.phase === "penaltyShootout" ? "Select" : "Substitute"}
             legal={true}
           />
+        </div>
+        <div className={`col-start-${2 - sign}`}>
           <ActionButton
             action={{ type: "timeout", args: { side: side } }}
             label="Timeout"
             legal={legalTeamActions[actions.TIMEOUT]}
           />
         </div>
-        <div className="flex-1">
+        <div className={`col-start-${2 - sign}`}>
+          <FreeKickButton
+            game={game}
+            legalTeamActions={legalTeamActions}
+            side={side}
+            setPlay="directFreeKick"
+            label="Direct Free Kick"
+            action={actions.DIRECT_FREE_KICK}
+          />
+        </div>
+        <div className={`col-start-${2 - sign}`}>
+          <FreeKickButton
+            game={game}
+            legalTeamActions={legalTeamActions}
+            side={side}
+            setPlay="throwIn"
+            label="Throw-in"
+            action={actions.THROW_IN}
+          />
+        </div>
+        <div className="col-start-2 row-span-2">
           <ActionButton
             action={{ type: "goal", args: { side: side } }}
             label="Goal"
             legal={legalTeamActions[actions.GOAL]}
           />
         </div>
-        <TeamStats game={game} params={params} side={side} sign={sign} team={team} />
+        <div className="col-start-2">
+          <FreeKickButton
+            game={game}
+            legalTeamActions={legalTeamActions}
+            side={side}
+            setPlay="indirectFreeKick"
+            label="Indirect Free Kick"
+            action={actions.INDIRECT_FREE_KICK}
+          />
+        </div>
+        <div className="col-start-2">
+          <FreeKickButton
+            game={game}
+            legalTeamActions={legalTeamActions}
+            side={side}
+            setPlay="goalKick"
+            label="Goal Kick"
+            action={actions.GOAL_KICK}
+          />
+        </div>
+        <div className={`col-start-${2 + sign} row-span-2`}>
+          <TeamStats game={game} params={params} side={side} sign={sign} team={team} />
+        </div>
+        <div className={`col-start-${2 + sign}`}>
+          <FreeKickButton
+            game={game}
+            legalTeamActions={legalTeamActions}
+            side={side}
+            setPlay="penaltyKick"
+            label="Penalty Kick"
+            action={actions.PENALTY_KICK}
+          />
+        </div>
+        <div className={`col-start-${2 + sign}`}>
+          <FreeKickButton
+            game={game}
+            legalTeamActions={legalTeamActions}
+            side={side}
+            setPlay="cornerKick"
+            label="Corner Kick"
+            action={actions.CORNER_KICK}
+          />
+        </div>
       </div>
       <div className="grow flex flex-col gap-2 overflow-auto">
         {selectingPlayerTypePSO
@@ -286,7 +336,6 @@ const TeamPanel = ({
                 />
               ))}
       </div>
-      <FreeKickButtons game={game} legalTeamActions={legalTeamActions} side={side} sign={sign} />
     </div>
   );
 };
