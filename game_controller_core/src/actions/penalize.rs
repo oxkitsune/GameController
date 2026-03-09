@@ -20,7 +20,7 @@ pub struct Penalize {
 impl Action for Penalize {
     fn execute(&self, c: &mut ActionContext) {
         // Map the penalty call to a (penalty, warning, caution) tuple.
-        let mut penalty = match self.call {
+        let /* mut */ penalty = match self.call {
             PenaltyCall::IllegalPosition => (Some(Penalty::IllegalPositioning), false, false),
             PenaltyCall::MotionInSet => (Some(Penalty::MotionInSet), false, false),
             PenaltyCall::LocalGameStuck => (Some(Penalty::LocalGameStuck), false, false),
@@ -34,6 +34,10 @@ impl Action for Penalize {
             PenaltyCall::Caution => (None, false, true),
             PenaltyCall::SendOff => (Some(Penalty::SentOff), false, false),
         };
+
+        /*
+
+        German Open 2026 Special
 
         if penalty.1 {
             c.game.teams[self.side][self.player].warnings += 1;
@@ -50,6 +54,7 @@ impl Action for Penalize {
                 penalty.0 = Some(Penalty::SentOff);
             }
         }
+        */
 
         if let Some(penalty) = penalty.0 {
             c.game.teams[self.side][self.player].penalty_timer = match penalty {
@@ -135,14 +140,14 @@ impl Action for Penalize {
                 PenaltyCall::Warn => {
                     // "Manual Interaction by Team Members" is always possible. Technically even if
                     // the player already has a penalty.
-                    true
+                    false /* German Open 2026 Special */
                 }
                 PenaltyCall::Caution => {
                     // "Damage to the Field" is always possible. Technically even if the player
                     // already has penalty.
-                    true
+                    false /* German Open 2026 Special */
                 }
-                PenaltyCall::SendOff => true,
+                PenaltyCall::SendOff => false, /* German Open 2026 Special */
             })
     }
 }
