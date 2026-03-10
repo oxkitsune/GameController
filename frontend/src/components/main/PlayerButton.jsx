@@ -48,9 +48,8 @@ const PlayerButton = ({ color, legal, sign, onClick, player }) => {
     player.penalty != "sentOff" &&
     player.penalty != "substitute" &&
     player.penalty != "motionInSet" &&
-    (player.penaltyTimer.started
-      ? player.penaltyTimer.started.remaining[0] < 10
-      : player.penalty != "pickedUp");
+    player.penaltyTimer.started &&
+    player.penaltyTimer.started.remaining[0] < 10;
 
   return (
     <button

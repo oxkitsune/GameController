@@ -108,8 +108,6 @@ pub struct TestParams {
     /// It is allowed to start/continue a penalty shoot-out even though the game is actually
     /// decided.
     pub penalty_shootout: bool,
-    /// It is allowed to unpenalize players before their time is over.
-    pub unpenalize: bool,
 }
 
 /// This struct contains constant parameters that are specific to a game.
@@ -453,6 +451,8 @@ pub struct Player {
     pub penalty: Penalty,
     /// The timer which counts down until the penalty is over.
     pub penalty_timer: Timer,
+    /// The value of the team's penalty counter when the player was penalized.
+    pub penalty_increment: u32,
     /// The number of warnings of the player.
     pub warnings: u8,
     /// The number of cautions (yellow cards) of the player.

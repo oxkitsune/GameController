@@ -318,7 +318,6 @@ pub fn make_launch_data(config_directory: &Path, args: Args) -> Result<LaunchDat
             test: TestParams {
                 no_delay: args.no_delay,
                 penalty_shootout: args.penalty_shootout,
-                unpenalize: args.unpenalize,
             },
         },
         window: WindowSettings {

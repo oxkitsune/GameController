@@ -57,9 +57,10 @@ impl Action for Penalize {
         */
 
         if let Some(penalty) = penalty.0 {
+            c.game.teams[self.side][self.player].penalty_increment =
+                c.game.teams[self.side].penalty_counter;
             c.game.teams[self.side][self.player].penalty_timer = match penalty {
-                Penalty::SentOff => Timer::Stopped,
-                _ => Timer::Started {
+                Penalty::MotionInSet => Timer::Started {
                     remaining: ({
                         // The duration is composed of the base duration plus the increment for
                         // each previous incremental penalty of this team.
@@ -71,16 +72,15 @@ impl Action for Penalize {
                     }),
                     run_condition: RunCondition::ReadyOrPlaying,
                     // Motion in Set is removed automatically.
-                    behavior_at_zero: if penalty == Penalty::MotionInSet {
-                        BehaviorAtZero::Expire(vec![VAction::Unpenalize(Unpenalize {
+                    behavior_at_zero: BehaviorAtZero::Expire(vec![VAction::Unpenalize(
+                        Unpenalize {
                             side: self.side,
                             player: self.player,
-                            force: false,
-                        })])
-                    } else {
-                        BehaviorAtZero::Clip
-                    },
+                            force: true,
+                        },
+                    )]),
                 },
+                _ => Timer::Stopped,
             };
             c.game.teams[self.side][self.player].penalty = penalty;
             if c.params.competition.penalties[penalty].incremental {

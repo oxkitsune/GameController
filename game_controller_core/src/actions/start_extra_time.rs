@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::action::{Action, ActionContext};
 use crate::timer::{BehaviorAtZero, RunCondition, Timer};
-use crate::types::{Penalty, Phase, State};
+use crate::types::{Penalty, Phase, Side, State};
 
 /// This struct defines an action that starts extra time.
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
@@ -50,5 +50,6 @@ impl Action for StartExtraTime {
         c.game.phase == Phase::SecondHalf
             && c.game.state == State::Finished
             && c.params.competition.extra_half_duration.is_some()
+            && c.game.teams[Side::Home].score == c.game.teams[Side::Away].score
     }
 }

@@ -65,7 +65,6 @@ export const getLaunchData = async () => {
           test: {
             noDelay: false,
             penaltyShootout: false,
-            unpenalize: false,
           },
         },
         window: { fullscreen: false },

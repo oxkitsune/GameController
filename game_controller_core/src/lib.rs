@@ -76,6 +76,7 @@ impl GameController {
                         } else {
                             Penalty::Substitute
                         },
+                        penalty_increment: 0,
                         penalty_timer: Timer::Stopped,
                         warnings: 0,
                         cautions: 0,

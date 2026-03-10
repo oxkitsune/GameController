@@ -2,8 +2,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::action::{Action, ActionContext, VAction};
 use crate::actions::SwitchHalf;
-use crate::timer::{BehaviorAtZero, RunCondition, Timer};
-use crate::types::{Phase, SetPlay, State};
+use crate::timer::{BehaviorAtZero, RunCondition, SignedDuration, Timer};
+use crate::types::{Penalty, Phase, SetPlay, State};
 
 /// This struct defines an action which corresponds to the referee call "Finish" (or rather
 /// two/three successive whistles).
@@ -14,9 +14,21 @@ impl Action for FinishHalf {
     fn execute(&self, c: &mut ActionContext) {
         // Cancel all penalty timers.
         c.game.teams.values_mut().for_each(|team| {
-            team.players.iter_mut().for_each(|player| {
-                player.penalty_timer = Timer::Stopped;
-            })
+            team.players
+                .iter_mut()
+                .filter(|player| {
+                    !matches!(
+                        player.penalty,
+                        Penalty::NoPenalty | Penalty::SentOff | Penalty::Substitute
+                    )
+                })
+                .for_each(|player| {
+                    player.penalty_timer = Timer::Started {
+                        remaining: SignedDuration::ZERO,
+                        run_condition: RunCondition::ReadyOrPlaying,
+                        behavior_at_zero: BehaviorAtZero::Clip,
+                    };
+                })
         });
 
         c.game.secondary_timer = Timer::Stopped;

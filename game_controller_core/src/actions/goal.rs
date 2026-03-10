@@ -2,7 +2,6 @@ use serde::{Deserialize, Serialize};
 
 use crate::action::{Action, ActionContext};
 use crate::actions::{FinishHalf, StartSetPlay};
-use crate::timer::Timer;
 use crate::types::{Phase, SetPlay, Side, State};
 
 /// This struct defines an action for when a goal has been scored.
@@ -26,11 +25,6 @@ impl Action for Goal {
             c.game.teams[self.side].score += 1;
         }
         if mercy_rule {
-            c.game.teams.values_mut().for_each(|team| {
-                team.players.iter_mut().for_each(|player| {
-                    player.penalty_timer = Timer::Stopped;
-                })
-            });
             c.game.phase = Phase::SecondHalf;
             FinishHalf.execute(c);
         } else if c.game.phase != Phase::PenaltyShootout {

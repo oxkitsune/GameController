@@ -60,6 +60,9 @@ impl Action for Substitute {
         c.game.phase != Phase::PenaltyShootout
             && self.player_in != self.player_out
             && c.game.teams[self.side][self.player_in].penalty == Penalty::Substitute
-            && !matches!(c.game.teams[self.side][self.player_out].penalty, Penalty::SentOff | Penalty::Substitute)
+            && !matches!(
+                c.game.teams[self.side][self.player_out].penalty,
+                Penalty::SentOff | Penalty::Substitute
+            )
     }
 }

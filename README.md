@@ -128,7 +128,6 @@ The following settings are exposed via the launcher:
 - Testing:
     - No Delay: This checkbox disables the delay of game state transitions.
     - Penalty Shoot-out: This checkbox allows to start/continue a penalty shoot-out even though the game is actually decided.
-    - Unpenalize: This checkbox allows to unpenalize players before their time is over.
 - Mirror: This checkbox selects if the home (first on the schedule) team defends the right side (from the GameController's perspective) instead of the left side, as a result of the coin tosses before the game.
 - Fullscreen: This checkbox selects if the window should be switched to fullscreen mode when started.
 - Interface: This box selects the network interface to run on (see [above](#network-communication)). Not all interfaces that are listed will necessarily work.
@@ -149,15 +148,19 @@ However, it is generally avoided that the layout or meaning of buttons changes w
 #### Penalties
 
 Penalties are applied by clicking the button labeled with the penalty call first and then clicking the button of the penalized player.
-This will start a timer on the respective player's button which starts flashing once there are only 10 seconds remaining.
+The name of the penalty will appear below the player's color, but no timer appears yet.
+Once the player is returned / placed by the robot handler, the player button is clicked again.
+This will start a timer.
+Clicking the player while the timer is counting down will unset the timer (i.e. reset everything to the state immediately after penalizing the player).
+This should be done in case the robot handler wants to do something with the robot again.
+Once there are only 10 seconds remaining, the player's button starts flashing.
 Players are not unpenalized automatically.
-Instead they must be unpenalized by clicking their button once their penalty time is over and they have been placed correctly by the assistant referees.
+Instead they must be unpenalized by clicking their button once their penalty time is over.
 If a player has been penalized by mistake, and some actions have followed so that in cannot be simply [undone](#undo), penalties can be removed early by pressing the *Shift* key while clicking the player.
 This will, however, not remove any effects on the team's penalty counter and the penalty times of other players that have been penalized later.
 
 Some penalties are special:
-- The Pick-Up penalty can replace any existing penalty, although the timer is inherited from the original penalty.
-- The Motion in Standby/Set penalty can be applied to multiple players without selecting it, accommodating the case that multiple players respond at once to a wrong whistle.
+- The Motion in Set penalty can be applied to multiple players without selecting it, accommodating the case that multiple players respond at once to a wrong whistle.
     Furthermore, players are unpenalized automatically when the timer has elapsed, since they are never removed from the field.
 
 #### Message Counting
@@ -174,11 +177,11 @@ When a timeout is taken during the Ready or Set state, the clock is reset to the
 When a timeout is taken while the half-time break timer counts down, the timer is adjusted by the duration of a timeout.
 This can cause confusion in so-called interleaved games because the half-time break is often longer than usual, so that even after taking a timeout that half-time break timer can still be negative.
 
-#### Extra Time
+#### Additional Time (Allowance for Time Lost)
 
-A minute of extra time can be added by pressing the "+" button next to the main clock.
+A minute of additional time can be added by pressing the "+" button next to the main clock.
 This button becomes available during stoppages of play once a minute of play has elapsed in the half.
-Adding a minute of extra time also increases the message budget for both teams, unless a team had communicated illegally before.
+Adding a minute of additional time also increases the message budget for both teams, unless a team had communicated illegally before.
 
 #### Substitution
 
@@ -187,7 +190,7 @@ Then, click the player which should be removed from play.
 The list of players will now change to the list of available substitutes (note that this list is scrollable).
 From this list, the player that shall replace the previously selected player is clicked.
 Depending on the game state, the new player gets a penalty or inherits the penalty of the substituted player.
-The goalkeeper property is tranferred to the substitute, i.e. when the goalkeeper is substituted, the substitute is expected to wear a goalkeeper jersey and inherits the privileges of the goalkeeper.
+The goalkeeper property is transferred to the substitute, i.e. when the goalkeeper is substituted, the substitute is expected to wear a goalkeeper jersey and inherits the privileges of the goalkeeper.
 
 This feature must also be used before the start of a half in order to match the set of players in the GameController to the players that are actually on the field.
 If a team wants to play with a goalkeeper with a number from 2-7 (or 2-5 in the Challenge Shield), this must be done using three substitutions (e.g. if a team wants to play with players 1-7, but have the 3 be the goalkeeper, it must substitute 8 for 1, 1 for 3, 3 for 8).
@@ -195,7 +198,6 @@ If a team wants to play with a goalkeeper with a number from 2-7 (or 2-5 in the 
 #### Penalty Shoot-out
 
 A penalty shoot-out can only be started after two halves have been played and the score is equal.
-However, it does not depend on the game mode, because penalty shoot-outs can already be needed in games in which the clock does not stop during the Ready and Set states.
 It is only allowed to switch to the next shot as long as the result of the game is not clear yet.
 
 The Playing state can be entered once players on both sides are selected.

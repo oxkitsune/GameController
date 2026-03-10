@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::action::{Action, ActionContext};
-use crate::timer::Timer;
+use crate::timer::{BehaviorAtZero, RunCondition, Timer};
 use crate::types::{Penalty, PlayerNumber, Side, State};
 
 /// This struct defines an action to unpenalize players.
@@ -18,22 +18,43 @@ pub struct Unpenalize {
 
 impl Action for Unpenalize {
     fn execute(&self, c: &mut ActionContext) {
-        c.game.teams[self.side][self.player].penalty_timer = Timer::Stopped;
-        c.game.teams[self.side][self.player].penalty = Penalty::NoPenalty;
+        if self.force
+            || matches!(
+                c.game.teams[self.side][self.player].penalty_timer,
+                Timer::Started { .. }
+            )
+        {
+            if self.force
+                || c.game.teams[self.side][self.player]
+                    .penalty_timer
+                    .get_remaining()
+                    .is_zero()
+            {
+                c.game.teams[self.side][self.player].penalty = Penalty::NoPenalty;
+            }
+            c.game.teams[self.side][self.player].penalty_timer = Timer::Stopped;
+        } else {
+            c.game.teams[self.side][self.player].penalty_timer = Timer::Started {
+                remaining: ({
+                    // The duration is composed of the base duration plus the increment for
+                    // each previous incremental penalty of this team.
+                    (c.params.competition.penalties[c.game.teams[self.side][self.player].penalty]
+                        .duration
+                        + c.params.competition.penalty_duration_increment
+                            * c.game.teams[self.side][self.player].penalty_increment)
+                        .try_into()
+                        .unwrap()
+                }),
+                run_condition: RunCondition::ReadyOrPlaying,
+                behavior_at_zero: BehaviorAtZero::Clip,
+            };
+        }
     }
 
     fn is_legal(&self, c: &ActionContext) -> bool {
-        c.game.teams[self.side][self.player].penalty != Penalty::NoPenalty
-            && c.game.teams[self.side][self.player].penalty != Penalty::SentOff
-            && c.game.teams[self.side][self.player].penalty != Penalty::Substitute
-            && (c.game.teams[self.side][self.player]
-                .penalty_timer
-                .get_remaining()
-                .is_zero()
-                // We allow motion in Set penalties to be revoked while still in Set.
-                || (c.game.teams[self.side][self.player].penalty == Penalty::MotionInSet
-                    && c.game.state == State::Set)
-                || self.force
-                || c.params.game.test.unpenalize)
+        !matches!(
+            c.game.teams[self.side][self.player].penalty,
+            Penalty::NoPenalty | Penalty::SentOff | Penalty::Substitute
+        )
     }
 }

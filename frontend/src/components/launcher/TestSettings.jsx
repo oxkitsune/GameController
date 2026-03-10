@@ -21,15 +21,6 @@ const TestSettings = ({ test, setTest }) => {
             onChange={(e) => setTest({ ...test, penaltyShootout: e.target.checked })}
           />
         </div>
-        <div className="flex flex-row items-center gap-2">
-          <label htmlFor="unpenalize">Unpenalize</label>
-          <input
-            type="checkbox"
-            checked={test.unpenalize}
-            id="unpenalize"
-            onChange={(e) => setTest({ ...test, unpenalize: e.target.checked })}
-          />
-        </div>
       </details>
     </div>
   );
