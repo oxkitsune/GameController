@@ -6,7 +6,7 @@ const StatePanel = ({ game, params, legalGameActions }) => {
     ((game.phase === "firstHalf" || game.phase === "firstExtraHalf") &&
       game.state === "finished") ||
     ((game.phase === "secondHalf" || game.phase === "secondExtraHalf") && game.state === "initial");
-  const hasExtraTime = params.competition.extraHalfDuration.secs > 0;
+  const hasExtraTime = params.competition.extraHalfDuration != null;
 
   let stopResumeButton = (
     <div className="col-span-5">
